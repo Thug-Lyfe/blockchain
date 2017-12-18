@@ -13,15 +13,16 @@ let MessageType = {
     BLOCKCHAIN: 2
 };
 class Block {
-    constructor(index, timestamp, data, previousHash = '') {
+    constructor(index, timestamp, data, previousHash = '', nonce) {
         this.index = index;
         this.timestamp = timestamp;
         this.data = data
         this.previousHash = previousHash;
         this.hash = this.calculateHash()
-        this.nonce = 0;
+        this.nonce = nonce || 0;
         this.timeUsed = 0;
     }
+
     calculateHash() {
         return SHA256(this.index + this.timestamp + JSON.stringify(this.data) + this.previousHash + this.nonce).toString();
     }
@@ -34,7 +35,7 @@ class Block {
 
         }
         this.timeUsed = new Date() - timestart;
-        console.log("Block mined #1: " + this.hash + " : time used: " + this.timeUsed + "ms : index: " +this.index);
+        console.log("Block mined #1: " + this.hash + " : time used: " + this.timeUsed + "ms : index: " + this.index);
     }
     mineBlock2() {
         let timestart = new Date();
@@ -54,6 +55,7 @@ class Blockchain {
         firstBlock.mineBlock();
         this.chain = [firstBlock];
     }
+
     getLatestBlock() {
         return this.chain[this.chain.length - 1]
     }
@@ -75,9 +77,12 @@ class Blockchain {
         }
     }
     replaceChain(newChain) {
-        if (this.isChainValid(newBlocks) && newBlocks.length > blockchain.length) {
+        newChain = generateBlockChain(newChain);
+        console.log("er chain valid? " + newChain.isChainValid());
+        console.log("her er input: " + newChain.chain.length + " og den anden " + this.chain.length);
+        if (newChain.isChainValid() && newChain.chain.length > this.chain.length) {
             console.log('Received blockchain is valid. Replacing current blockchain with received blockchain');
-            this.chain = newBlocks;
+            this.chain = newChain.chain;
             broadcast(responseLatestMsg());
         } else {
             console.log('Received blockchain invalid');
@@ -101,6 +106,7 @@ class Blockchain {
     };
     isChainValid() {
         for (let index = 1; index < this.chain.length; index++) {
+            
             const currentBlock = this.chain[index];
             const previousBlock = this.chain[index - 1];
 
@@ -119,6 +125,16 @@ class Blockchain {
         return true
     }
 }
+let generateBlockChain = function (newChain) {
+    let tempChain = new Blockchain();
+    for (i = 1; i < newChain.length; i++) {
+        let cb = newChain[i];
+        tempChain.addBlock(new Block(cb.index, cb.timestamp, cb.data, cb.previousHash, cb.nonce));
+    }
+    return tempChain;
+}
+
+
 let uCoins = new Blockchain();
 
 let initHttpServer = function () {
@@ -129,30 +145,32 @@ let initHttpServer = function () {
         res.send(JSON.stringify(uCoins.chain))
     });
     app.post('/mineBlock/:type', function (req, res) {
-        let index = uCoins.getLatestBlock().index+1;
+        let index = uCoins.getLatestBlock().index + 1;
         console.log(index)
-        if(req.params.type == 1){
-            uCoins.addBlock(new Block(index,new Date()/1000,req.body.data))
+        if (req.params.type == 1) {
+            uCoins.addBlock(new Block(index, new Date() / 1000, req.body.data))
         }
-        else{
-            uCoins.addBlock2(new Block(index,new Date()/1000,req.body.data))
+        else {
+            uCoins.addBlock2(new Block(index, new Date() / 1000, req.body.data))
         }
         broadcast(responseLatestMsg());
-        
+
         res.send();
     });
     app.get('/peers', function (req, res) {
-        //console.log(sockets)
-        res.send(sockets.map(function (s) {
-            s.url
-        }));
-        
+        console.log(sockets);
+        console.log(Object.keys(sockets));
+        res.send(JSON.stringify(sockets.length));
+        //res.send(sockets.map(function (s) {
+          //  s
+        //}));
+
     });
     app.post('/addPeer', function (req, res) {
         connectToPeers([req.body.peer]);
         res.send();
     });
-    app.listen(http_port, function() {
+    app.listen(http_port, function () {
         console.log('Listening http on port: ' + http_port)
     });
 };
@@ -218,6 +236,7 @@ let handleBlockchainResponse = function (message) {
     let receivedBlocks = JSON.parse(message.data).sort(function (b1, b2) {
         return (b1.index - b2.index);
     });
+
     let latestBlockReceived = receivedBlocks[receivedBlocks.length - 1];
     let latestBlockHeld = uCoins.getLatestBlock();
     if (latestBlockReceived.index > latestBlockHeld.index) {
