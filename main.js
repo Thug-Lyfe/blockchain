@@ -142,7 +142,7 @@ let initHttpServer = function () {
         res.send();
     });
     app.get('/peers', function (req, res) {
-        console.log(sockets)
+        //console.log(sockets)
         res.send(sockets.map(function (s) {
             s.url
         }));
