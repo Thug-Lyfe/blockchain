@@ -146,40 +146,6 @@ let write = function (ws, message) {
 let broadcast = function (message) {
     //this broadcasts the message to all peers.
 }
-```isBlockValid(newBlock) {
-    //this is run by addBlock and addBlock2 to check if the block has a correct hash.
-    };
-    isChainValid() {
-    //this is run by replaceChain to see if the received Blockchain is a valid Blockchain, so it does not contain bad blocks.
-    }
-}
-```
-
-```Javascript
-class Block {
-    constructor(index, timestamp, data, previousHash = '', nonce) {
-        this.index = index;
-        this.timestamp = timestamp;
-        this.data = data
-        this.previousHash = previousHash;
-        this.hash = this.calculateHash()
-        this.nonce = nonce || 0;
-        this.timeUsed = 0;
-    }
-    calculateHash() {
-    //this uses the 'crypto-js' npm package to make a hash from all the block parameters
-    }
-    mineBlock() {
-    //this mines a block squentially
-    this.nonce++
-    //until it hits the proof of work defined, in this case the hash has to start with fac
-    }
-    mineBlock2() {
-    //this mines a block randomly
-    this.nonce = Math.random();
-    //until it hits the proof of work defined, in this case the hash has to start with fac
-    }
-}
 ```
 
 
