@@ -202,7 +202,7 @@ chmod +x ScreenShotScript.sh
 And when you want to run either of the scripts, you have to type the commands specified below.
 NOTE:
 <i>
-If you installed docker and docker-compose, via the ubuntu repository (apt-get), it's possible that root access is required to execute the above scripts (due to docker requirering superuser permissions). In that case, simply append <i>sudo</i> before each of the following lines (alternatively your can type <i>$- sudo su</i> for a super user bash session.</i>
+If you installed docker and docker-compose, via the debian package manager (APT), it's possible that root access is required to execute the above scripts (due to docker requirering superuser permissions). In that case, simply append <i>sudo</i> before each of the following lines (alternatively your can type <i>$- sudo su</i> for a super user bash session.</i>
 
 ```sh
 ./quick_start.sh
@@ -261,14 +261,14 @@ echo "so we add the NODE4 as a peer to NODE3"
 curl -H "Content-type:application/json" -d '{"peer" : "ws://node4:6001"}' -X POST http://localhost:3003/addPeer
 ```
 
-This connects node no. 4 to node no 3, and when we mine two new blocks from node 4, it updates the chain, showing the connection is working:
+This connects node 4 to node 3, and when we mine two new blocks from node 4, it updates the chain, showing the connection is working:
 
 <p align="center"><img src="https://github.com/Thug-Lyfe/blockchain/blob/master/shotsForAss/2.png" alt="arch diagram" width="100%" height="100%" border="10"></p>
 
 
 ### Test it yourself
 
-If you want to run our project yourself, you can refer to the <i>quick_start.sh</i> script, which takes you through quite a similar path to the <i>ScreenShotScript.sh</i> file. The only major difference being that quick_start have less verbose print lines, aswell as immediate connection to node no. 4.    
+If you want to run our project yourself, you can refer to the <i>quick_start.sh</i> script, which takes you through quite a similar path to the <i>ScreenShotScript.sh</i> file. The only major difference being that quick_start have less verbose print lines, aswell as immediate connection to node 4.    
 
 
 
