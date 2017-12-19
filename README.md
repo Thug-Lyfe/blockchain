@@ -187,9 +187,10 @@ class Block {
 ## Demonstration 
 
 #### Relevant Scripts:
+
 <p align="center"><img src="https://github.com/Thug-Lyfe/blockchain/blob/master/shotsForAss/3.PNG"alt="arch diagram" width="100%" height="100%" border="10"></p>
 
-Both of the script highlighted with yellow in the above picture are bash scripts, and as such much be executed on a *NIX platform of some decription.
+Both of the script highlighted with yellow in the above picture are bash scripts, and as such must be executed on a UNIX platform of some decription (tested on Linux mint 18.00 sarah (fork of ubuntu 16.04) in a standard bash shell).
 
 After you clone our repository from github, all you need to do is navigate to the cloned folder, and type the following:
 
