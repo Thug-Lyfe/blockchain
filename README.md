@@ -184,3 +184,88 @@ class Block {
 
 
 
+## Demonstration 
+
+#### Relevant Scripts:
+<p align="center"><img src="https://github.com/Thug-Lyfe/blockchain/blob/master/shotsForAss/3.PNG"alt="arch diagram" width="100%" height="100%" border="10"></p>
+
+Both of the script highlighted with yellow in the above picture are bash scripts, and as such much be executed on a *NIX platform of some decription.
+
+After you clone our repository from github, all you need to do is navigate to the cloned folder, and type the following:
+
+```sh
+chmod +x quick_start.sh
+chmod +x ScreenShotScript.sh
+
+```sh
+And when you want to run either of the scripts, you have to type If you installed docker and docker-compose, via the ubuntu repository (apt-get), it's possible that root access is required to execute the above scripts (due to docker requirering superuser permissions). In that case, simply append <i>sudo</i> before each of the following lines (alternatively your can type <i>$- sudo su</i> for a super user bash session.
+
+```sh
+./quick_start.sh
+
+or
+
+./ScreenShotScript.sh
+
+```sh
+
+### Preface
+
+Our demonstration of our blockchain project, will start 4 seperate nodes (on four different docker containers).
+
+Of these containers node 1, node 2 and node 3 are connected to one another in the following way: 1 <-> 2 <-> 3. We'll come back to Node number 4 later.
+
+### Screenshots and Explanations 
+
+We have made a script called <i>ScreenShotScript.sh</i>, that demonstrates the workins of our system. (for screenshot purpose, otherwise use <i>quick_start.sh</i>) 
+
+The first thing the script does, is run the following commands to build the images and the containers
+
+```sh
+docker build .
+docker-compose up -d --build
+```
+
+Logically, only the second of the above commands should be nessecary, but we've found that our project dosen't work without the initial "docker build ."
+
+Besides afore mentioned things, this command also connects the individual containers (nodes) with one another in such a fashion that the nodes are <i>"links in a chain"</i>. Below is an example from the docker-compose file.
+
+
+```sh
+  node3:
+    environment:
+      - PEERS=ws://node2:6001
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+    - "3003:3001"
+    links:
+      - node2:node2
+```
+
+Next, our script proceeds to mine two blocks a piece from each of nodes 1 to 3 (so the chain is made up of six blocks in total), this is illustrated in the following screendump.  
+
+
+<p align="center"><img src="https://github.com/Thug-Lyfe/blockchain/blob/master/shotsForAss/1.png" alt="arch diagram" width="100%" height="100%" border="10"></p>
+
+
+Now node 4 is still not connected, therefore our script runs the following:
+```sh
+echo "as you can see, it is only at block index 2, this is because it is not connected"
+echo "so we add the NODE4 as a peer to NODE3"
+curl -H "Content-type:application/json" -d '{"peer" : "ws://node4:6001"}' -X POST http://localhost:3003/addPeer
+```
+
+This connects node no. 4 to node no 3, and when we mine two new blocks from node 4, it updates the chain, showing the connection is working:
+
+<p align="center"><img src="https://github.com/Thug-Lyfe/blockchain/blob/master/shotsForAss/2.png" alt="arch diagram" width="100%" height="100%" border="10"></p>
+
+
+### Test it yourself
+
+If you want to run our project yourself, you can refer to the <i>quick_start.sh</i> script, which takes you through quite a similar path to the <i>ScreenShotScript.sh</i> file. The only major difference being that quick_start have less verbose print lines, aswell as immediate connection to node no. 4.    
+
+
+
+
