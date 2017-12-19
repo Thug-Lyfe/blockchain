@@ -27,7 +27,7 @@ services:
     links:
       - node2:node2
   node4:
-    environment:
+
     build:
       context: ./
       dockerfile: Dockerfile
