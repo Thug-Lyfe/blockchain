@@ -199,7 +199,10 @@ chmod +x quick_start.sh
 chmod +x ScreenShotScript.sh
 
 ```
-And when you want to run either of the scripts, you have to type If you installed docker and docker-compose, via the ubuntu repository (apt-get), it's possible that root access is required to execute the above scripts (due to docker requirering superuser permissions). In that case, simply append <i>sudo</i> before each of the following lines (alternatively your can type <i>$- sudo su</i> for a super user bash session.
+And when you want to run either of the scripts, you have to type the commands specified below.
+NOTE:
+<i>
+If you installed docker and docker-compose, via the ubuntu repository (apt-get), it's possible that root access is required to execute the above scripts (due to docker requirering superuser permissions). In that case, simply append <i>sudo</i> before each of the following lines (alternatively your can type <i>$- sudo su</i> for a super user bash session.</i>
 
 ```sh
 ./quick_start.sh
